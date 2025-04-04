@@ -1,0 +1,53 @@
+version = 0.1
+
+[default.deploy.parameters]
+stack_name = "localHapiFHIRStack"
+resolve_s3 = true
+s3_prefix = "localHapiFHIRStack"
+region = "ca-central-1"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = false
+parameter_overrides = [
+  "TestPrefix=''",
+  "Env=local",
+  "VpcCIDR=30.0.0.0/18",
+  "EcrImageUri=460016595608.dkr.ecr.ca-central-1.amazonaws.com/organization-images:hapi_fhir_jspaserver_cambian-latest",
+  "VPCID=/localCS/Organization/CF/VPCID",
+  "PrivateSubnets=/localCS/Organization/CF/PrivateSubnets",
+  "PrivateSubnet1=/localCS/Organization/CF/PrivateSubnet1",
+  "VpcEndpointSGID=/localCS/Organization/CF/APIGatewayVPCEndpointSGID",
+  "RDSClientSGID=/localCS/Organization/CF/RDSClientSGID",
+  "OrganizationLambdaSGID=/localCS/Organization/CF/LambdaSGID",
+  "RDSConnectionSecretArn=/localCS/Organization/RDSConnectionSecretArn",
+  "RDSCredentialsSecretArn=/localCS/Organization/RDSCredentialsSecretArn",
+  "HapiFhirDBName=/localCS/Organization/HapiFhir/DBName",
+  "HapiFhirCredentialsSecretArn=/localCS/Organization/HapiFhirDbCredentialSecretArn"
+]
+image_repository = "460016595608.dkr.ecr.ca-central-1.amazonaws.com/organization-images"
+
+[dev.deploy.parameters]
+stack_name = "cambian-devHapiFHIRStack"
+resolve_s3 = true
+s3_prefix = "cambian-devHapiFHIRStack"
+region = "ca-central-1"
+capabilities = "CAPABILITY_IAM CAPABILITY_NAMED_IAM"
+disable_rollback = false
+parameter_overrides = [
+  "TestPrefix=''",
+  "Env=cambian-dev",
+  "VpcCIDR=30.0.0.0/18",
+  "EcrImageUri=460016595608.dkr.ecr.ca-central-1.amazonaws.com/organization-images:hapi_fhir_jspaserver_cambian-v1",
+  "VPCID=/cambian-devCS/Organization/CF/VPCID",
+  "PrivateSubnets=/cambian-devCS/Organization/CF/PrivateSubnets",
+  "PrivateSubnet1=/cambian-devCS/Organization/CF/PrivateSubnet1",
+  "VpcEndpointSGID=/cambian-devCS/Organization/CF/APIGatewayVPCEndpointSGID",
+  "RDSClientSGID=/cambian-devCS/Organization/CF/RDSClientSGID",
+  "OrganizationLambdaSGID=/cambian-devCS/Organization/CF/LambdaSGID",
+  "RDSConnectionSecretArn=/cambian-devCS/Organization/RDSConnectionSecretArn",
+  "RDSCredentialsSecretArn=/cambian-devCS/Organization/RDSCredentialsSecretArn",
+  "HapiFhirDBName=/cambian-devCS/Organization/HapiFhir/DBName",
+  "HapiFhirCredentialsSecretArn=/cambian-devCS/Organization/HapiFhirDbCredentialSecretArn",
+  "ACMCertificateARN=\"\"",
+  "WebACLArn=\"arn:aws:wafv2:eu-north-1:460016595608:regional/webacl/widget-waf/f17d7319-6523-4699-b494-589a03f8140e\"",
+]
+image_repository = "460016595608.dkr.ecr.ca-central-1.amazonaws.com/organization-images"
