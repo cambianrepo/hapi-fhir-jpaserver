@@ -1,4 +1,5 @@
-version: "3"
+version: "3.8"
+
 services:
 
   hapi-fhir-postgres:
@@ -15,12 +16,42 @@ services:
       - hapi-fhir-postgres:/var/lib/postgresql/data
 
   hapi-fhir-jpaserver:
-    # build: .
     image: hapi-fhir/hapi-fhir-jpaserver-cambian:latest
     container_name: hapi-fhir-jpaserver
-    restart: on-failure
+    restart: "no"
+    read_only: true
+    volumes:
+      # - hapi-fhir-tmp:/tmp_rw  -- this still worked after removing symlink
+      - type: volume
+        source: hapi-fhir-tmp
+        target: /tmp_rwx
+        read_only: false
+      - type: volume
+        source: hapi-fhir-lucenefiles
+        target: /app/target/lucenefiles
+        read_only: false
     ports:
       - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://hapi-fhir-postgres:5432/hapi_fhir_db"
+      SPRING_DATASOURCE_USERNAME: "hapi_fhir_user"
+      SPRING_DATASOURCE_PASSWORD: "hapi_fhir_password"
+      JAVA_TOOL_OPTIONS: "-Djava.io.tmpdir=/tmp_rwx"
+
+
+
+    # volumes:
+    #   - hapi-fhir-tmp:/tmp_rw
+    #   # - hapi-fhir-target:/app/target  fails
+    #   # - hapi-fhir-target:/app/target/lucenefiles fails
+    #   - hapi-fhir-lucene-concept:/app/target/lucenefiles/TermConcept
+    #   - hapi-fhir-lucene-resources:/app/target/lucenefiles/ResourceTable
+    # tmpfs:
+    #   - /app/target:rw,exec,mode=1777  THIS WORKS!  to bad no go in Fargate
 
 volumes:
   hapi-fhir-postgres:
+  hapi-fhir-tmp:
+  hapi-fhir-lucenefiles:
+  # hapi-fhir-lucene-concept:
+  # hapi-fhir-lucene-resources:

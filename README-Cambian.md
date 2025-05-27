@@ -30,6 +30,9 @@ docker build -t hapi-fhir/hapi-fhir-jpaserver-cambian .
 To test the docker image in local docker, run
 ```bash
 docker run -p 8080:8080 hapi-fhir/hapi-fhir-jpaserver-cambian:latest
+ -or-
+docker compose -f docker-compose-postgres.yml up hapi-fhir-postgres
+
 ```
 The image can then be copied to AWS ECS (Elastic Container Server), talk to devops about this.
 
@@ -57,12 +60,17 @@ Also see [Docker section in HAPI README.md](./README.md#using-the-dockerfile-and
     ```
 3. After the build completes, tag your image so you can push the image to this repository:
     ```
-    docker tag cambian-devhapi-fhir:latest 975050054044.dkr.ecr.ca-central-1.amazonaws.com/cambian-devhapi-fhir:latest
+      not working, old ==> docker tag cambian-devhapi-fhir:latest 975050054044.dkr.ecr.ca-central-1.amazonaws.com/cambian-devhapi-fhir:latest
+      -or-
+    docker tag hapi-fhir/hapi-fhir-jpaserver-cambian:latest 975050054044.dkr.ecr.ca-central-1.amazonaws.com/cambian-devhapi-fhir:v20250526
     ```
 4. Run the following command to push this image to your newly created AWS repository:
     ``` 
     docker push 975050054044.dkr.ecr.ca-central-1.amazonaws.com/cambian-devhapi-fhir:latest
+      -or-
+    docker push 975050054044.dkr.ecr.ca-central-1.amazonaws.com/cambian-devhapi-fhir:v20250526
+    
     ```
-The image is must be built for x86:sunrise:
+The image must be built for x86:sunrise:
 After you finish uploading, just let me know with the list of environment variables!
 
